@@ -56,9 +56,14 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       await renderDashboardSidebar('profile');
+      const params = new URLSearchParams(location.search);
       let id = params.get('id');
       if (!id) {
-        id = await getSessionUserId();
+        try {
+          id = await getSessionUserId();
+        } catch (e) {
+          console.error("Auth session error:", e);
+        }
       }
 
       const students = await getAllStudents();
@@ -202,11 +207,6 @@
   </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
