@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildOn — Student Project Memory Platform</title>
+  <meta name="description" content="Explore, learn from, and build on student projects. A collaborative knowledge system.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right"><div class="app-user-pill" id="userPill"></div></div>
+      </div>
+      <div class="app-content">
+
+        <!-- Hero — Knowledge Discovery -->
+        <section class="hero" style="padding:48px 32px;border-radius:var(--radius-lg);margin-bottom:32px">
+          <span class="section-label">Student Knowledge Network</span>
+          <h1>Discover. Learn. Build Forward.</h1>
+          <p class="hero-subtitle">Every project tells a story. Explore the ideas, failures, and breakthroughs of student teams — then build on their knowledge.</p>
+          <div class="hero-actions">
+            <a href="explorer.html" class="btn btn-primary btn-lg">Explore Projects</a>
+            <a href="submit.html" class="btn btn-secondary btn-lg" style="background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:#fff">Submit Project</a>
+          </div>
+        </section>
+
+        <!-- Section 1 — Knowledge Clusters -->
+        <section style="margin-bottom:48px">
+          <div class="section-header" style="padding:0 0 24px">
+            <span class="section-label">Knowledge Clusters</span>
+            <h2>Where ideas are growing</h2>
+            <p>Explore problem spaces students are tackling across cohorts.</p>
+          </div>
+          <div class="cluster-grid" id="clusterGrid"></div>
+        </section>
+
+        <!-- Section 2 — Trending Projects -->
+        <section style="margin-bottom:48px">
+          <div class="section-header" style="padding:0 0 24px">
+            <span class="section-label">Trending</span>
+            <h2>Most forked projects</h2>
+            <p>Ideas that inspired new teams to build forward.</p>
+          </div>
+          <div class="card-grid" id="trendingGrid"></div>
+        </section>
+
+        <!-- Section 3 — Knowledge Gaps -->
+        <section style="margin-bottom:48px">
+          <div class="section-header" style="padding:0 0 24px">
+            <span class="section-label">Knowledge Gaps</span>
+            <h2>Unanswered questions from past teams</h2>
+            <p>Pick up where others left off. These questions are waiting for someone like you.</p>
+          </div>
+          <div id="knowledgeGaps"></div>
+        </section>
+
+        <!-- Section 4 — Legacy Builders -->
+        <section style="margin-bottom:48px">
+          <div class="section-header" style="padding:0 0 24px">
+            <span class="section-label">Legacy Builders</span>
+            <h2>Top contributors</h2>
+            <p>Students whose knowledge has traveled the farthest.</p>
+          </div>
+          <div class="legacy-preview" id="legacyPreview"></div>
+          <div style="text-align:center;margin-top:32px">
+            <a href="leaderboard.html" class="btn btn-secondary light">View Full Leaderboard →</a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await renderDashboardSidebar('dashboard');
+      const projects = await getAllProjects();
+      const questions = await getAllQuestions();
+      const students = await getAllStudents();
+
+      // --- Knowledge Clusters ---
+      const clusterIcons = {
+        'Food & Delivery': '🍴', 'Mental Health': '🧠', 'Education': '📚', 'EdTech': '💻',
+        'Sustainability': '🌿', 'Campus Safety': '🛡️', 'Career': '💼', 'Marketplace': '🏪'
+      };
+      const clusters = {};
+      projects.forEach(p => {
+        if (!clusters[p.category]) clusters[p.category] = { count: 0, openQ: 0 };
+        clusters[p.category].count++;
+        if (p.open_questions) clusters[p.category].openQ += p.open_questions.filter(q => q.status === 'open').length;
+      });
+      document.getElementById('clusterGrid').innerHTML = Object.entries(clusters).map(([cat, data]) => `
+        <div class="cluster-card" onclick="location.href='explorer.html?category=${encodeURIComponent(cat)}'">
+          <div class="cluster-icon">${clusterIcons[cat] || '📂'}</div>
+          <div class="cluster-name">${cat}</div>
+          <div class="cluster-stats">
+            <span>📄 ${data.count} project${data.count !== 1 ? 's' : ''}</span>
+            <span>❓ ${data.openQ} open question${data.openQ !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // --- Trending (most forked) ---
+      const trending = [...projects].filter(p => p.forks && p.forks.length).sort((a, b) => (b.forks?.length || 0) - (a.forks?.length || 0)).slice(0, 3);
+      document.getElementById('trendingGrid').innerHTML = trending.map(p => renderProjectCard(p)).join('');
+
+      // --- Knowledge Gaps ---
+      const openQuestions = questions.filter(q => q.status === 'open').slice(0, 5);
+      document.getElementById('knowledgeGaps').innerHTML = openQuestions.map(q => renderQuestionCard(q, true)).join('');
+
+      // --- Legacy Builders ---
+      const topStudents = [...students].sort((a, b) => b.legacy_score - a.legacy_score).slice(0, 5);
+      document.getElementById('legacyPreview').innerHTML = topStudents.map((s, i) => `
+        <div class="legacy-card" onclick="location.href='profile.html?id=${s.id}'">
+          <div class="lb-avatar">${getInitials(s.name)}</div>
+          <div>
+            <div class="lb-name">${s.name}</div>
+            <div class="lb-dept">${s.department} · ${s.legacy_score} pts</div>
+          </div>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>
+
+
+
+

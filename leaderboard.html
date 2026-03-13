@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legacy Leaderboard — BuildOn</title>
+  <meta name="description" content="Ranked by how far their knowledge travelled, not how much they submitted.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right"><div class="app-user-pill" id="userPill"></div></div>
+      </div>
+      <div class="app-content">
+        <div class="page-header">
+          <h1>Legacy Leaderboard</h1>
+          <p class="subtitle">Ranked by how far their knowledge travelled, not how much they submitted.</p>
+        </div>
+
+        <div class="tabs" id="lbTabs">
+          <button class="tab-btn active" data-tab="alltime">All Time</button>
+          <button class="tab-btn" data-tab="semester">This Semester</button>
+          <button class="tab-btn" data-tab="failures">Most Impactful Failures</button>
+        </div>
+
+        <div class="tab-content active" id="tab-alltime"><div id="alltimeList"></div></div>
+        <div class="tab-content" id="tab-semester"><div id="semesterList"></div></div>
+        <div class="tab-content" id="tab-failures"><div id="failuresList"></div></div>
+
+        <!-- Alumni Wall -->
+        <div class="alumni-section" id="alumniSection">
+          <span class="section-label">STILL GROWING AFTER GRADUATION</span>
+          <div id="alumniList"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>
+
+
+
+

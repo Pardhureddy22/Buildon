@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Projects — BuildOn</title>
+  <meta name="description" content="Browse all student projects. Search by problem, topic, or keyword.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right"><div class="app-user-pill" id="userPill"></div></div>
+      </div>
+      <div class="app-content">
+        <div class="page-header">
+          <h1>Explore Projects</h1>
+          <p class="subtitle"><span class="count" id="projectCount">0</span> projects documented</p>
+        </div>
+
+        <div class="search-bar">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" placeholder="Search by problem, topic or keyword">
+        </div>
+        <div id="similarityContainer"></div>
+
+        <div class="filter-row" id="filterCategory">
+          <button class="filter-pill active" data-value="all">All Categories</button>
+          <button class="filter-pill" data-value="Food & Delivery">Food & Logistics</button>
+          <button class="filter-pill" data-value="Mental Health">Mental Health</button>
+          <button class="filter-pill" data-value="Education">EdTech</button>
+          <button class="filter-pill" data-value="Sustainability">Sustainability</button>
+          <button class="filter-pill" data-value="Campus Safety">Safety</button>
+          <button class="filter-pill" data-value="Career">Career</button>
+          <button class="filter-pill" data-value="Marketplace">Marketplace</button>
+        </div>
+        <div class="filter-row" id="filterYear">
+          <button class="filter-pill active" data-value="all">All Years</button>
+          <button class="filter-pill" data-value="2024">2024</button>
+          <button class="filter-pill" data-value="2023">2023</button>
+          <button class="filter-pill" data-value="2022">2022</button>
+          <button class="filter-pill" data-value="2021">2021</button>
+          <button class="filter-pill" data-value="2020">2020</button>
+        </div>
+        <div class="filter-row" id="filterOutcome">
+          <button class="filter-pill active" data-value="all">All Outcomes</button>
+          <button class="filter-pill" data-value="Prototype">Prototype</button>
+          <button class="filter-pill" data-value="Deployed">Deployed</button>
+          <button class="filter-pill" data-value="Abandoned">Abandoned</button>
+        </div>
+        <div class="filter-row" id="filterTier" style="margin-bottom:24px">
+          <button class="filter-pill active" data-value="all">All Tiers</button>
+          <button class="filter-pill" data-value="Legend">Legend</button>
+          <button class="filter-pill" data-value="Platinum">Platinum</button>
+          <button class="filter-pill" data-value="Gold">Gold</button>
+          <button class="filter-pill" data-value="Silver">Silver</button>
+          <button class="filter-pill" data-value="Bronze">Bronze</button>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-bottom:24px">
+          <select class="sort-select" id="sortSelect">
+            <option value="recent">Most Recent</option>
+            <option value="rank">Highest Ranked</option>
+            <option value="forks">Most Forked</option>
+            <option value="legacy">Legacy Score</option>
+            <option value="alpha">Alphabetical</option>
+          </select>
+        </div>
+
+        <div class="card-grid" id="projectGrid"></div>
+        <div id="emptyState" style="display:none"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/similarity.js"></script>
+  <script src="js/explorer.js"></script>
+</body>
+</html>
+
+
+
+

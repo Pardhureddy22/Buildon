@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile — BuildOn</title>
+  <meta name="description" content="View student profile, projects, impact timeline, and badges.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right"><div class="app-user-pill" id="userPill"></div></div>
+      </div>
+      <div class="app-content" id="profileContent">
+        <div class="skeleton skeleton-card" style="height:400px"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    const badgeEmojis = {
+      'badge_fork_pioneer':'🔱','badge_persistent':'🔄','badge_mentor':'🎓',
+      'badge_deployed':'🚀','badge_legacy_builder':'🏗️','badge_impact_100':'💯',
+      'badge_cross_dept':'🌉','badge_forker':'🤝','badge_gold_tier':'🥇',
+      'badge_platinum_tier':'💎','badge_first_project':'🌱','badge_safety_champion':'🛡️',
+      'badge_green_champion':'🌿','badge_social_impact':'❤️','badge_multi_domain':'🎨'
+    };
+    const allBadges = [
+      {id:'badge_first_project',name:'First Step',desc:'Submitted first project'},
+      {id:'badge_deployed',name:'Ship It',desc:'Deployed a project'},
+      {id:'badge_legacy_builder',name:'Legacy Builder',desc:'Project was forked'},
+      {id:'badge_forker',name:'Standing on Shoulders',desc:'Forked a project'},
+      {id:'badge_persistent',name:'Persistent Builder',desc:'Same problem, multiple tries'},
+      {id:'badge_cross_dept',name:'Bridge Builder',desc:'Cross-department collab'},
+      {id:'badge_gold_tier',name:'Gold Standard',desc:'Gold quality tier'},
+      {id:'badge_platinum_tier',name:'Platinum Achievement',desc:'Platinum quality tier'},
+      {id:'badge_impact_100',name:'Century Impact',desc:'Impact score above 90'},
+      {id:'badge_mentor',name:'Mentor',desc:'Guided newer students'},
+      {id:'badge_fork_pioneer',name:'Fork Pioneer',desc:'First to fork a project'},
+      {id:'badge_safety_champion',name:'Safety Champion',desc:'Built safety project'},
+      {id:'badge_green_champion',name:'Green Champion',desc:'Built sustainability project'},
+      {id:'badge_social_impact',name:'Social Impact',desc:'Community-benefiting project'},
+      {id:'badge_multi_domain',name:'Renaissance Mind',desc:'3+ categories'}
+    ];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await renderDashboardSidebar('profile');
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id');
+      const students = await getAllStudents();
+      const projects = await getAllProjects();
+      const student = id ? students.find(s => s.id === id) : students[0];
+
+      if (!student) {
+        document.getElementById('profileContent').innerHTML = renderEmptyState('👤','Student Not Found','This profile doesn\'t exist.');
+        return;
+      }
+
+      const stuProjects = student.projects.map(pid => projects.find(p => p.id === pid)).filter(Boolean);
+      const earnedIds = (student.badges || []).map(b => b.id);
+      const initials = getInitials(student.name);
+
+      // Build impact timeline events
+      const events = [];
+      stuProjects.forEach(p => {
+        events.push({type:'project',desc:`Submitted <strong>${p.title}</strong>`,year:p.year,date:`${p.year}`});
+        if (p.forks && p.forks.length) {
+          p.forks.forEach(fid => {
+            const fork = projects.find(x => x.id === fid);
+            if (fork) events.push({type:'fork',desc:`<strong>${p.title}</strong> was forked into <strong>${fork.title}</strong>`,year:fork.year,date:`${fork.year}`});
+          });
+        }
+      });
+      (student.badges||[]).forEach(b => {
+        events.push({type:'badge',desc:`Earned badge: <strong>${b.name}</strong>`,year:student.graduation_year||2024,date:''});
+      });
+      events.sort((a,b) => (b.year||0)-(a.year||0));
+
+      // Group events by year
+      const grouped = {};
+      events.forEach(e => {
+        const y = e.year || 'Other';
+        if (!grouped[y]) grouped[y] = [];
+        grouped[y].push(e);
+      });
+
+      document.getElementById('profileContent').innerHTML = `
+        <div class="profile-layout">
+          <div class="profile-sidebar">
+            <div class="profile-avatar">${initials}</div>
+            <div class="profile-name">${student.name}</div>
+            <div class="profile-dept">${student.department} · Class of ${student.graduation_year || '—'}</div>
+            <div class="level-badge" style="margin-bottom:20px">Lv.${student.level} · ${student.level_title}</div>
+            <div class="profile-stat-box">
+              <div class="profile-stat-value">${student.impact_score}</div>
+              <div class="profile-stat-label">Impact Score</div>
+            </div>
+            <div class="profile-stat-box">
+              <div class="profile-stat-value">${student.legacy_score}</div>
+              <div class="profile-stat-label">Legacy Score</div>
+            </div>
+            <h3 style="font-size:14px;margin-top:20px;margin-bottom:8px">Badges</h3>
+            <div class="badge-grid">
+              ${allBadges.map(b => {
+                const earned = earnedIds.includes(b.id);
+                return `<div class="badge-cell ${earned ? '' : 'unearned'}">
+                  ${badgeEmojis[b.id] || '⭐'}
+                  <span class="badge-tooltip">${b.name}${earned ? '' : ' (locked)'}</span>
+                </div>`;
+              }).join('')}
+            </div>
+            <div class="badge-progress-bar" style="margin-top:12px">
+              <div class="badge-progress-fill" style="width:${Math.round((earnedIds.length / allBadges.length)*100)}%"></div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${earnedIds.length}/${allBadges.length} badges earned</div>
+          </div>
+
+          <div>
+            <div class="tabs" id="profileTabs">
+              <button class="tab-btn active" data-tab="projects">Projects</button>
+              <button class="tab-btn" data-tab="timeline">Impact Timeline</button>
+              <button class="tab-btn" data-tab="badges">Badges</button>
+            </div>
+
+            <div class="tab-content active" id="tab-projects">
+              ${stuProjects.length ? stuProjects.map(p => {
+                const tierClass = getTierClass(p.quality_tier);
+                const forks = p.forks ? p.forks.length : 0;
+                return `<div class="leaderboard-entry" onclick="location.href='detail.html?id=${p.id}'" style="cursor:pointer;margin-bottom:12px">
+                  <div class="lb-info" style="flex:1">
+                    <div class="lb-name">${p.title}</div>
+                    <div class="lb-dept">${p.year} · ${p.category}</div>
+                  </div>
+                  <span class="tier-badge ${tierClass}">${p.quality_tier}</span>
+                  <div class="lb-stats" style="margin-left:16px">
+                    <div class="lb-score" style="font-size:18px">${p.rank_score}</div>
+                    <div class="lb-sub">${forks} fork${forks!==1?'s':''}</div>
+                  </div>
+                </div>`;
+              }).join('') : renderEmptyState('📁','No projects yet','Submit your first project to get started.')}
+            </div>
+
+            <div class="tab-content" id="tab-timeline">
+              <div class="timeline">
+                ${Object.entries(grouped).map(([year, evts]) => `
+                  <div class="timeline-year-label">${year}</div>
+                  ${evts.map(e => `
+                    <div class="timeline-event">
+                      <div class="timeline-dot ${e.type}">
+                        ${e.type==='project'?'📄':e.type==='fork'?'🔀':e.type==='badge'?'🏅':'📌'}
+                      </div>
+                      <div class="timeline-desc">${e.desc}</div>
+                      <div class="timeline-date">${e.date}</div>
+                    </div>
+                  `).join('')}
+                `).join('')}
+              </div>
+              ${events.length === 0 ? renderEmptyState('📅','No activity yet','Events will appear as you contribute.') : ''}
+            </div>
+
+            <div class="tab-content" id="tab-badges">
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
+                ${allBadges.map(b => {
+                  const earned = earnedIds.includes(b.id);
+                  return `<div class="card" style="text-align:center;padding:20px;${earned ? '' : 'opacity:0.4;filter:grayscale(0.5)'}">
+                    <div style="font-size:32px;margin-bottom:8px">${badgeEmojis[b.id] || '⭐'}</div>
+                    <div style="font-size:14px;font-weight:600;margin-bottom:4px">${b.name}</div>
+                    <div style="font-size:12px;color:var(--text-muted)">${b.desc}</div>
+                    ${earned ? '<div style="font-size:11px;color:var(--success);margin-top:8px">✓ Earned</div>' : '<div style="font-size:11px;color:var(--text-muted);margin-top:8px">🔒 Locked</div>'}
+                  </div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Tab switching
+      document.querySelectorAll('#profileTabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#profileTabs .tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+

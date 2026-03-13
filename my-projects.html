@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Projects — BuildOn</title>
+  <meta name="description" content="View and manage your submitted projects.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right">
+          <div class="app-user-pill" id="userPill"></div>
+        </div>
+      </div>
+      <div class="app-content">
+        <div class="dash-welcome">
+          <div>
+            <h1>My Projects</h1>
+            <p class="subtitle">Projects you've submitted to the BuildOn ecosystem.</p>
+          </div>
+          <a href="submit.html" class="btn btn-primary btn-lg">+ Submit Project</a>
+        </div>
+        <div id="myProjectsList"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!(await requireAuth())) return;
+      await renderDashboardSidebar('myprojects');
+      const sessionName = await getSessionName();
+      document.getElementById('userPill').innerHTML = `<span class="user-avatar-sm">${getInitials(sessionName)}</span><span>${sessionName}</span>`;
+
+      const userId = await getSessionUserId();
+      const allProjects = await getAllProjects();
+
+      // Filter projects that belong to the current user
+      const myProjects = allProjects.filter(p => p.user_id === userId);
+
+      const container = document.getElementById('myProjectsList');
+
+      if (myProjects.length === 0) {
+        container.innerHTML = `<div class="empty-state" style="padding:80px 20px">
+          <div class="empty-state-icon">📁</div>
+          <h3>No projects submitted yet</h3>
+          <p>Submit your first project to start building your legacy on BuildOn.</p>
+          <a href="submit.html" class="btn btn-primary btn-lg" style="margin-top:24px">Submit Your First Project</a>
+        </div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(340px,1fr))">
+        ${myProjects.map(p => {
+          const catClass = getCategoryClass(p.category);
+          const outcomeClass = getOutcomeClass(p.outcome);
+          const forkCount = p.forks ? p.forks.length : 0;
+          return `<div class="card project-card" onclick="location.href='detail.html?id=${p.id}'">
+            <div class="project-card-header">
+              <span class="tag tag-${catClass}">${p.category}</span>
+              <span class="tier-badge ${getTierClass(p.quality_tier)}">${p.quality_tier || 'Bronze'}</span>
+            </div>
+            <div>
+              <div class="project-card-title">${p.title}</div>
+              <div class="project-card-team">${(p.team||[]).join(', ')} · ${p.year || '—'}</div>
+            </div>
+            <div class="project-card-body">${p.problem || ''}</div>
+            <div class="project-card-footer">
+              <span class="outcome-badge ${outcomeClass}">${p.outcome}</span>
+              <span class="fork-count">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6m0 0a3 3 0 1 0 3 3V9M18 3v6m0 0a3 3 0 0 1-3 3v0a3 3 0 0 1-3-3"/><circle cx="6" cy="18" r="3"/></svg>
+                ${forkCount}
+              </span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    });
+  </script>
+</body>
+</html>
+
+
+
+

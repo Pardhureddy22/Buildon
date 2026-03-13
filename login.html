@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — BuildOn</title>
+  <meta name="description" content="Sign in to BuildOn to explore, discuss, and contribute to student projects.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+  <div class="login-wrapper">
+    <div class="login-left">
+      <div class="login-brand">
+        <a href="index.html" class="nav-logo" style="font-size:24px;color:#fff">BuildOn</a>
+      </div>
+      <div class="login-tagline">
+        <h2>Build on the knowledge<br>of those before you.</h2>
+        <p>Every project. Every failure. Every lesson. All connected.</p>
+      </div>
+      <div class="login-stats-row">
+        <div class="login-stat"><span class="login-stat-num" id="lsProjects">12</span><span>Projects</span></div>
+        <div class="login-stat"><span class="login-stat-num" id="lsStudents">15</span><span>Students</span></div>
+        <div class="login-stat"><span class="login-stat-num" id="lsQuestions">22</span><span>Questions</span></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <!-- Login Form -->
+      <div class="login-card" id="loginCard">
+        <h1>Welcome back</h1>
+        <p class="login-subtitle">Continue building on the knowledge of those before you.</p>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="you@college.edu">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="Enter your password">
+        </div>
+        <div class="form-error" id="loginError" style="display:none;margin-bottom:16px"></div>
+        <button class="btn btn-primary btn-lg btn-full" id="loginBtn">Login</button>
+        <div class="login-toggle">
+          Don't have an account? <a href="#" id="showRegister">Create Account</a>
+        </div>
+      </div>
+
+      <!-- Register Form -->
+      <div class="login-card" id="registerCard" style="display:none">
+        <h1>Create Account</h1>
+        <p class="login-subtitle">Join the BuildOn ecosystem and start contributing.</p>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" id="regName" placeholder="Arjun Reddy">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="regEmail" placeholder="you@college.edu">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="regPassword" placeholder="Choose a password">
+        </div>
+        <div class="form-error" id="regError" style="display:none;margin-bottom:16px"></div>
+        <button class="btn btn-primary btn-lg btn-full" id="regBtn">Create Account</button>
+        <div class="login-toggle">
+          Already have an account? <a href="#" id="showLogin">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/session.js"></script>
+  <script>
+    // If already logged in, redirect
+    isLoggedIn().then(loggedIn => { if (loggedIn) location.href = 'dashboard.html'; });
+
+    // Toggle forms
+    document.getElementById('showRegister').addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('registerCard').style.display = 'block';
+    });
+    document.getElementById('showLogin').addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('registerCard').style.display = 'none';
+      document.getElementById('loginCard').style.display = 'block';
+    });
+
+    // Login
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errEl = document.getElementById('loginError');
+      if (!email || !password) {
+        errEl.textContent = 'Please fill in all fields.';
+        errEl.style.display = 'block';
+        return;
+      }
+      const result = await loginUser(email, password);
+      if (result.success) {
+        location.href = 'dashboard.html';
+      } else {
+        errEl.textContent = result.error;
+        errEl.style.display = 'block';
+      }
+    });
+
+    // Register
+    document.getElementById('regBtn').addEventListener('click', async () => {
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const errEl = document.getElementById('regError');
+      if (!name || !email || !password) {
+        errEl.textContent = 'Please fill in all fields.';
+        errEl.style.display = 'block';
+        return;
+      }
+      
+      const btn = document.getElementById('regBtn');
+      btn.textContent = 'Creating...';
+      btn.disabled = true;
+
+      const result = await registerUser(name, email, password);
+      if (result.success) {
+        // Auto-login after registration
+        await loginUser(email, password);
+        location.href = 'dashboard.html';
+      } else {
+        errEl.textContent = result.error;
+        errEl.style.display = 'block';
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+      }
+    });
+
+    // Enter key support
+    document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginBtn').click(); });
+    document.getElementById('regPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('regBtn').click(); });
+
+    // Load real stats
+    (async () => {
+      const projects = await getAllProjects();
+      const students = await getAllStudents();
+      const questions = await getAllQuestions();
+      document.getElementById('lsProjects').textContent = projects.length;
+      document.getElementById('lsStudents').textContent = students.length;
+      document.getElementById('lsQuestions').textContent = questions.length;
+    })();
+  </script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Questions — BuildOn</title>
+  <meta name="description" content="Questions past teams never got to answer. Pick one up and run with it.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right"><div class="app-user-pill" id="userPill"></div></div>
+      </div>
+      <div class="app-content">
+        <div class="page-header">
+          <h1>Open Questions</h1>
+          <p class="subtitle">Questions past teams never got to answer. Pick one up and run with it. <span class="count" id="totalCount">0</span> total.</p>
+        </div>
+
+        <!-- Most Wanted -->
+        <div class="most-wanted" id="mostWanted">
+          <span class="section-label">UNANSWERED THE LONGEST</span>
+          <div class="scroll-row" id="mostWantedRow"></div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-row" id="statusFilter">
+          <button class="filter-pill active" data-value="all">All</button>
+          <button class="filter-pill" data-value="open">Open</button>
+          <button class="filter-pill" data-value="adopted">Adopted</button>
+          <button class="filter-pill" data-value="resolved">Resolved</button>
+        </div>
+        <div class="filter-row" id="catFilter" style="margin-bottom:24px"></div>
+
+        <!-- Question list -->
+        <div id="questionsList"></div>
+        <div id="emptyState" style="display:none"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await renderDashboardSidebar('questions');
+      const questions = await getAllQuestions();
+
+      document.getElementById('totalCount').textContent = questions.length;
+
+      // Most wanted — open, sorted by year (oldest first), then by attempts
+      const mostWanted = questions.filter(q => q.status === 'open')
+        .sort((a, b) => a.year_posted - b.year_posted || (b.times_attempted||0) - (a.times_attempted||0))
+        .slice(0, 3);
+
+      document.getElementById('mostWantedRow').innerHTML = mostWanted.map(q => `
+        <div class="card" style="min-width:300px;flex-shrink:0">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Posted ${q.year_posted} ${q.times_attempted ? `· <span class="attempt-badge">⟳ ${q.times_attempted} attempted</span>` : ''}</div>
+          <div style="font-size:15px;font-weight:500;color:var(--text-primary);margin-bottom:12px;line-height:1.5">${q.text}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:13px;color:var(--text-muted)">${q.source_project_title}</span>
+            <button class="btn btn-teal btn-sm">Adopt</button>
+          </div>
+        </div>
+      `).join('');
+
+      // Category filter pills
+      const cats = [...new Set(questions.map(q => q.category))];
+      const catFilterEl = document.getElementById('catFilter');
+      catFilterEl.innerHTML = `<button class="filter-pill active" data-value="all">All Categories</button>` +
+        cats.map(c => `<button class="filter-pill" data-value="${c}">${c}</button>`).join('');
+
+      // Filter state
+      let statusVal = 'all', catVal = 'all';
+
+      function render() {
+        let filtered = questions.filter(q => {
+          if (statusVal !== 'all' && q.status !== statusVal) return false;
+          if (catVal !== 'all' && q.category !== catVal) return false;
+          return true;
+        });
+
+        const list = document.getElementById('questionsList');
+        const empty = document.getElementById('emptyState');
+        if (filtered.length === 0) {
+          list.innerHTML = '';
+          empty.style.display = 'block';
+          empty.innerHTML = renderEmptyState('❓', 'No questions found', 'Try adjusting your filters.');
+        } else {
+          empty.style.display = 'none';
+          list.innerHTML = filtered.map(q => renderQuestionCard(q, true)).join('');
+        }
+      }
+
+      // Status filter
+      document.getElementById('statusFilter').querySelectorAll('.filter-pill').forEach(p => {
+        p.addEventListener('click', () => {
+          document.getElementById('statusFilter').querySelectorAll('.filter-pill').forEach(x => x.classList.remove('active'));
+          p.classList.add('active');
+          statusVal = p.dataset.value;
+          render();
+        });
+      });
+
+      // Cat filter
+      catFilterEl.querySelectorAll('.filter-pill').forEach(p => {
+        p.addEventListener('click', () => {
+          catFilterEl.querySelectorAll('.filter-pill').forEach(x => x.classList.remove('active'));
+          p.classList.add('active');
+          catVal = p.dataset.value;
+          render();
+        });
+      });
+
+      render();
+    });
+  </script>
+</body>
+</html>
+
+
+
+

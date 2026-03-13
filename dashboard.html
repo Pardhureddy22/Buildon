@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — BuildOn</title>
+  <meta name="description" content="Your BuildOn dashboard — see stats, activity, and project recommendations.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right">
+          <div class="app-user-pill" id="userPill"></div>
+        </div>
+      </div>
+      <div class="app-content">
+        <!-- Welcome -->
+        <div class="dash-welcome">
+          <div>
+            <h1>Welcome back, <span id="welcomeName">Student</span></h1>
+            <p class="subtitle">Here's what's happening in the BuildOn ecosystem.</p>
+          </div>
+          <a href="submit.html" class="btn btn-primary btn-lg">+ New Project</a>
+        </div>
+
+        <!-- Stats -->
+        <div class="dash-stats">
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">📄</div>
+            <div class="dash-stat-value" id="statSubmitted">0</div>
+            <div class="dash-stat-label">Projects Submitted</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">🔀</div>
+            <div class="dash-stat-value" id="statForked">0</div>
+            <div class="dash-stat-label">Projects Forked</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">✋</div>
+            <div class="dash-stat-value" id="statAdopted">0</div>
+            <div class="dash-stat-label">Questions Adopted</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">🏆</div>
+            <div class="dash-stat-value" id="statLegacy">0</div>
+            <div class="dash-stat-label">Legacy Score</div>
+          </div>
+        </div>
+
+        <!-- Two columns: Activity + Continue Building -->
+        <div class="dash-grid">
+          <div class="dash-panel">
+            <h3 class="dash-panel-title">
+              <span>Recent Activity</span>
+              <span class="section-label" style="margin:0">LIVE FEED</span>
+            </h3>
+            <div class="feed-list" id="activityFeed"></div>
+          </div>
+          <div class="dash-panel">
+            <h3 class="dash-panel-title">
+              <span>Continue Building</span>
+              <span class="section-label" style="margin:0">RECOMMENDED</span>
+            </h3>
+            <div id="continueBuild"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,825 @@
+{
+  "projects": [
+    {
+      "id": "proj_001",
+      "title": "CampusEats",
+      "team": ["Arjun Mehta", "Priya Sharma"],
+      "year": 2020,
+      "category": "Food & Delivery",
+      "outcome": "Abandoned",
+      "quality_tier": "Bronze",
+      "rank_score": 42,
+      "problem": "Students had no reliable way to order food from campus canteens during peak hours. Long queues meant missing classes, and no existing app served the specific needs of our campus layout with 4 separate food courts.",
+      "approach": "Built a mobile-first web app with real-time menu updates from each canteen. Used Firebase for order management and integrated UPI payments through Razorpay test mode. Designed a slot-based ordering system to reduce congestion.",
+      "what_worked": "The slot-based ordering concept was validated — 73% of surveyed students said they would use timed pickup slots. The UI/UX testing showed high usability scores. Menu digitization process we created was later adopted by the college admin.",
+      "failures": [
+        {
+          "title": "Canteen owners refused to update menus digitally",
+          "description": "We assumed canteen staff would log in daily to update availability. In reality, most staff were uncomfortable with technology and saw it as extra unpaid work. We tried training sessions but attendance dropped after week one."
+        },
+        {
+          "title": "Payment gateway integration blocked by college policy",
+          "description": "The college administration refused to allow any third-party payment processing on campus network citing security concerns. This killed our core value proposition of pre-ordering and paying online."
+        },
+        {
+          "title": "Real-time order tracking was unreliable",
+          "description": "Firebase free tier had connection limits we hit during lunch rush. Orders would appear delayed or duplicated. We couldn't afford the paid tier and had no server-side solution."
+        }
+      ],
+      "insights": [
+        { "text": "Campus food tech needs buy-in from non-technical stakeholders (canteen staff) before building any features", "confidence": "high" },
+        { "text": "Payment integration in institutional settings requires 3-6 months of policy navigation — start this first, not last", "confidence": "high" },
+        { "text": "Slot-based ordering reduces perceived wait time by 40% even without actual speed improvement", "confidence": "medium" },
+        { "text": "Firebase free tier cannot handle more than 50 concurrent connections — insufficient for campus-scale apps", "confidence": "high" }
+      ],
+      "open_questions": [
+        { "id": "q_001", "text": "How do you incentivize non-technical canteen staff to adopt digital menu management without making it feel like extra work?", "status": "open" },
+        { "id": "q_002", "text": "Is there a payment integration approach that satisfies institutional security policies while still enabling pre-payment?", "status": "adopted" },
+        { "id": "q_003", "text": "Could a photo-based menu update system (just snap a picture of today's menu board) replace manual data entry entirely?", "status": "open" }
+      ],
+      "tags": ["food-tech", "campus", "mobile-web", "payments"],
+      "forked_from": null,
+      "forks": ["proj_007"],
+      "impact_score": 68,
+      "legacy_score": 520
+    },
+    {
+      "id": "proj_002",
+      "title": "MindSpace",
+      "team": ["Kavya Nair", "Rohan Iyer"],
+      "year": 2020,
+      "category": "Mental Health",
+      "outcome": "Prototype",
+      "quality_tier": "Silver",
+      "rank_score": 61,
+      "problem": "Students dealing with academic stress, homesickness, and anxiety had no private, stigma-free way to process emotions on campus. The counseling center had a 3-week waitlist and visiting it carried social stigma.",
+      "approach": "Created a guided journaling web app with daily mood tracking, CBT-based writing prompts, and anonymous peer support threads. Used local storage for complete privacy — no data ever left the device.",
+      "what_worked": "The CBT prompt library (48 prompts across 6 categories) received strong positive feedback in user testing. Mood tracking visualizations helped students identify patterns. The anonymous peer thread concept was validated but not fully built.",
+      "failures": [
+        {
+          "title": "Students didn't return after first session",
+          "description": "72% of users completed the onboarding and first journal entry but never came back. We had no push notification capability (web app limitation) and journaling requires habit formation support we didn't build."
+        },
+        {
+          "title": "Anonymous peer support attracted trolling",
+          "description": "Within the first week of testing with 30 users, anonymous threads had inappropriate content. We had no moderation system and building one would compromise the anonymity promise."
+        }
+      ],
+      "insights": [
+        { "text": "Mental health apps need habit formation mechanics (streaks, reminders, micro-rewards) — the tool alone isn't enough", "confidence": "high" },
+        { "text": "Full anonymity and safe community are fundamentally in tension — you need creative moderation approaches", "confidence": "high" },
+        { "text": "Students prefer evening journaling (8-11 PM) over morning — schedule prompts accordingly", "confidence": "medium" }
+      ],
+      "open_questions": [
+        { "id": "q_004", "text": "How can you moderate anonymous mental health content without breaking the anonymity that makes it safe?", "status": "open" },
+        { "id": "q_005", "text": "What habit formation mechanics work for journaling apps — streaks, social accountability, or gamification?", "status": "adopted" }
+      ],
+      "tags": ["mental-health", "journaling", "wellness", "anonymous"],
+      "forked_from": null,
+      "forks": ["proj_010"],
+      "impact_score": 74,
+      "legacy_score": 610
+    },
+    {
+      "id": "proj_003",
+      "title": "PeerLearn",
+      "team": ["Sneha Reddy", "Aditya Kulkarni", "Meera Joshi"],
+      "year": 2021,
+      "category": "Education",
+      "outcome": "Prototype",
+      "quality_tier": "Gold",
+      "rank_score": 78,
+      "problem": "Students struggling in specific subjects had no easy way to find peers who excelled in those areas. Existing study groups were formed through social circles, leaving out introverts and students from different departments.",
+      "approach": "Built a skill-matching marketplace where students could list subjects they could teach and subjects they needed help with. Used a simple algorithm to match complementary skill pairs. Added scheduling, video call links, and a rating system.",
+      "what_worked": "The matching algorithm successfully paired 34 unique tutor-student combinations during a 2-week pilot. 89% of matched pairs completed at least one session. Cross-department connections happened organically — CS students teaching math to commerce students was the most common pairing.",
+      "failures": [
+        {
+          "title": "Rating system created anxiety and reduced participation",
+          "description": "Peer tutors were afraid of getting bad ratings from students they were helping for free. Several tutors withdrew after receiving a single 3-star rating. The competitive framing undermined the collaborative spirit."
+        },
+        {
+          "title": "No-show rate was 35% for scheduled sessions",
+          "description": "Without any penalty or commitment mechanism, students would schedule sessions and simply not show up. This frustrated tutors and eroded trust in the platform."
+        },
+        {
+          "title": "Subject taxonomy was too rigid",
+          "description": "Our predefined list of 40 subjects didn't capture the real granularity students needed. Someone needed help with 'Python pandas for data analysis' not just 'Python'. We couldn't adapt the taxonomy fast enough."
+        }
+      ],
+      "insights": [
+        { "text": "Replace competitive ratings with simple thank-you notes and impact metrics (hours helped, sessions completed) for volunteer-based platforms", "confidence": "high" },
+        { "text": "Commitment mechanisms (study deposits, mutual scheduling confirmation) reduce no-show rates significantly", "confidence": "medium" },
+        { "text": "Let students describe their needs in free text and use NLP matching instead of rigid category dropdowns", "confidence": "medium" },
+        { "text": "Cross-department tutoring creates more diverse and effective learning experiences than within-department", "confidence": "high" }
+      ],
+      "open_questions": [
+        { "id": "q_006", "text": "What commitment mechanism works best for free peer tutoring — deposits, social contracts, or reputation systems?", "status": "open" },
+        { "id": "q_007", "text": "Can NLP-based skill matching outperform manual category selection for connecting students with complementary knowledge?", "status": "adopted" }
+      ],
+      "tags": ["education", "peer-learning", "matching", "marketplace"],
+      "forked_from": null,
+      "forks": ["proj_008"],
+      "impact_score": 91,
+      "legacy_score": 840
+    },
+    {
+      "id": "proj_004",
+      "title": "GreenCommute",
+      "team": ["Vikram Singh", "Ananya Das"],
+      "year": 2021,
+      "category": "Sustainability",
+      "outcome": "Abandoned",
+      "quality_tier": "Bronze",
+      "rank_score": 28,
+      "problem": "80% of students commuted to campus alone by auto-rickshaw or personal vehicle. No platform existed to coordinate shared commutes, and the environmental cost was ignored because individual rides were cheap enough.",
+      "approach": "Built a commute-matching app that grouped students by location and schedule. Added a carbon footprint tracker showing individual and collective savings. Gamified with a leaderboard for greenest commuters.",
+      "what_worked": "The carbon footprint visualization was compelling — students were shocked to see their annual commute emissions. The concept of location-based commute groups was solid and received positive feedback in surveys.",
+      "failures": [
+        {
+          "title": "Safety concerns killed adoption among women students",
+          "description": "Women students (who made up 55% of our campus) were uncomfortable sharing rides with strangers. We had no verification system, no emergency features, and no way to enable women-only ride groups. This single issue made the app non-viable for the majority."
+        },
+        {
+          "title": "Schedule matching was computationally harder than expected",
+          "description": "Students had irregular schedules that changed weekly. Our simple time-slot matching produced almost no viable groups because everyone had different class timings across different days."
+        }
+      ],
+      "insights": [
+        { "text": "Safety features (verification, emergency contacts, women-only options) are prerequisites, not add-ons, for any shared mobility platform", "confidence": "high" },
+        { "text": "Student schedules are too irregular for simple time-slot matching — need flexible window-based algorithms", "confidence": "high" },
+        { "text": "Environmental motivation alone doesn't drive behavior change — need convenience or cost savings as primary hooks", "confidence": "medium" }
+      ],
+      "open_questions": [
+        { "id": "q_008", "text": "How do you build trust and safety into a peer ride-sharing platform for college students, especially for women?", "status": "open" },
+        { "id": "q_009", "text": "Can flexible departure windows (± 15 min) solve the schedule matching problem for irregular student timetables?", "status": "open" }
+      ],
+      "tags": ["sustainability", "commute", "carpooling", "green-tech"],
+      "forked_from": null,
+      "forks": ["proj_011"],
+      "impact_score": 31,
+      "legacy_score": 180
+    },
+    {
+      "id": "proj_005",
+      "title": "SafeWalk",
+      "team": ["Ishita Banerjee", "Rahul Verma", "Deepa Krishnan"],
+      "year": 2022,
+      "category": "Campus Safety",
+      "outcome": "Prototype",
+      "quality_tier": "Silver",
+      "rank_score": 65,
+      "problem": "Students walking across campus late at night (after library hours, lab sessions, or events) felt unsafe. Poorly lit pathways, no emergency call points, and no buddy system meant students — especially women — avoided evening campus activities.",
+      "approach": "Built a buddy-matching system where students heading in the same direction at the same time could walk together. Added a live location sharing feature with emergency SOS button that sends GPS coordinates to campus security and three emergency contacts.",
+      "what_worked": "The SOS feature was simple and effective — one tap sent location to security and contacts via SMS API. Buddy matching had a 60% success rate during peak evening hours (8-10 PM). Campus security office agreed to integrate the SOS alerts into their existing monitoring system.",
+      "failures": [
+        {
+          "title": "Location tracking drained phone batteries rapidly",
+          "description": "Continuous GPS tracking for the walk-sharing feature consumed 15-20% battery per hour. Students stopped using it because they needed their phones for the ride home. We couldn't find a power-efficient alternative that maintained accuracy."
+        },
+        {
+          "title": "Buddy matching failed during off-peak hours",
+          "description": "The system needed a critical mass of simultaneous users to find walking buddies. Before 7 PM and after 11 PM, there were too few users for reliable matching. These were exactly the hours when safety was most needed."
+        }
+      ],
+      "insights": [
+        { "text": "Safety apps must work with minimal battery impact — students won't sacrifice phone battery for safety features", "confidence": "high" },
+        { "text": "Buddy systems need critical mass to function — consider integrating with existing campus activities to bootstrap user base", "confidence": "medium" },
+        { "text": "Simple SOS features (one-tap emergency alert) provide more immediate value than complex social features", "confidence": "high" },
+        { "text": "Campus security partnerships are achievable and dramatically increase legitimacy — approach them early", "confidence": "medium" }
+      ],
+      "open_questions": [
+        { "id": "q_010", "text": "What's the minimum user base needed for a buddy-matching safety system to work reliably on a campus of 5000 students?", "status": "open" },
+        { "id": "q_011", "text": "Can BLE beacons or WiFi triangulation replace GPS for indoor/campus location with acceptable accuracy and lower battery usage?", "status": "open" }
+      ],
+      "tags": ["safety", "campus", "location", "emergency"],
+      "forked_from": null,
+      "forks": [],
+      "impact_score": 56,
+      "legacy_score": 390
+    },
+    {
+      "id": "proj_006",
+      "title": "SwapIt",
+      "team": ["Nisha Patel", "Karthik Raman"],
+      "year": 2022,
+      "category": "Marketplace",
+      "outcome": "Deployed",
+      "quality_tier": "Platinum",
+      "rank_score": 88,
+      "problem": "Every semester, students bought new textbooks, lab coats, and supplies that previous batches were throwing away. There was no trusted platform for second-hand exchange within campus — WhatsApp groups were chaotic and unmoderated.",
+      "approach": "Built a campus-exclusive marketplace with college email verification. Added condition ratings with photo proof, price suggestions based on item age, and a meeting point system using campus landmarks. Implemented a simple reputation system based on completed transactions.",
+      "what_worked": "The college email verification created instant trust. 156 items were listed in the first month. The meeting point system (predefined safe campus locations) solved the logistics problem elegantly. Revenue saved by students in semester one: estimated ₹2.3 lakhs collectively.",
+      "failures": [
+        {
+          "title": "Textbook edition mismatches caused disputes",
+          "description": "Sellers listed textbooks without specifying editions. Buyers would meet up only to find the book was an older edition not matching their syllabus. This caused frustration and negative word-of-mouth."
+        },
+        {
+          "title": "No payment escrow led to scam attempts",
+          "description": "Two incidents of sellers not showing up after confirming a deal and one case of a counterfeit textbook. Without any payment protection or escrow system, trust took a hit that was hard to recover."
+        }
+      ],
+      "insights": [
+        { "text": "College email verification is the simplest and most effective trust mechanism for campus marketplaces", "confidence": "high" },
+        { "text": "Predefined meeting points on campus remove 90% of logistics friction in peer-to-peer exchanges", "confidence": "high" },
+        { "text": "For textbooks, ISBN or edition matching should be mandatory fields — free-text titles cause mismatches", "confidence": "high" },
+        { "text": "Even small-scale fraud (2-3 incidents) can destroy trust in a campus community — need prevention not just detection", "confidence": "medium" }
+      ],
+      "open_questions": [
+        { "id": "q_012", "text": "What's the simplest escrow or payment protection system that works for low-value campus transactions (₹100-2000 range)?", "status": "open" },
+        { "id": "q_013", "text": "Can ISBN scanning automate textbook listing and prevent edition mismatch problems entirely?", "status": "open" }
+      ],
+      "tags": ["marketplace", "second-hand", "campus", "sustainability"],
+      "forked_from": null,
+      "forks": ["proj_009"],
+      "impact_score": 95,
+      "legacy_score": 920
+    },
+    {
+      "id": "proj_007",
+      "title": "CampusEats v2",
+      "team": ["Arjun Mehta", "Tanvi Gupta", "Siddharth Nair"],
+      "year": 2022,
+      "category": "Food & Delivery",
+      "outcome": "Prototype",
+      "quality_tier": "Silver",
+      "rank_score": 58,
+      "problem": "Building on CampusEats' failure, this project tackled the same canteen ordering problem but focused on eliminating the two biggest blockers: canteen staff tech adoption and payment policy restrictions.",
+      "approach": "Replaced staff-managed menus with a photo-based system — canteen staff just photograph the day's menu board, and OCR extracts items. Switched from online payment to a prepaid campus card system that the college already used for printing credits, sidestepping payment policy issues.",
+      "what_worked": "The photo-to-menu pipeline worked with 85% accuracy using Google Vision API. Campus card integration was approved by admin within 2 weeks since the system already existed. Two canteens agreed to a pilot program.",
+      "failures": [
+        {
+          "title": "OCR accuracy dropped with handwritten menu boards",
+          "description": "Two of four canteens used handwritten chalkboard menus. OCR accuracy on these dropped to 40%, making the menu unreliable. Printed menus worked fine but handwritten ones were essentially unreadable."
+        },
+        {
+          "title": "Campus card system had no API — integration was manual",
+          "description": "The existing campus card system was a closed proprietary system with no API. We had to propose a manual reconciliation process that canteen owners found too complex. The elegant technical solution hit an infrastructure wall."
+        }
+      ],
+      "insights": [
+        { "text": "Photo-based input dramatically lowers the tech barrier for non-technical stakeholders — pursue this pattern", "confidence": "high" },
+        { "text": "Leveraging existing institutional payment systems avoids policy battles but creates integration complexity", "confidence": "medium" },
+        { "text": "Always verify API availability before building integrations — legacy institutional systems rarely have APIs", "confidence": "high" }
+      ],
+      "open_questions": [
+        { "id": "q_014", "text": "Can a custom-trained OCR model handle handwritten Devanagari and English mixed-script menu boards with >80% accuracy?", "status": "open" },
+        { "id": "q_015", "text": "Is there a way to create a lightweight campus payment token system that doesn't require institutional payment infrastructure?", "status": "open" }
+      ],
+      "tags": ["food-tech", "campus", "ocr", "payments"],
+      "forked_from": "proj_001",
+      "forks": ["proj_009"],
+      "impact_score": 52,
+      "legacy_score": 340
+    },
+    {
+      "id": "proj_008",
+      "title": "StudyBridge",
+      "team": ["Sneha Reddy", "Farhan Ahmed", "Pooja Hegde"],
+      "year": 2023,
+      "category": "Education",
+      "outcome": "Prototype",
+      "quality_tier": "Gold",
+      "rank_score": 82,
+      "problem": "Evolving PeerLearn's matching concept, StudyBridge aimed to solve the matching quality problem using NLP to understand what students actually needed help with, instead of relying on rigid subject categories.",
+      "approach": "Students describe their learning needs in natural language. We used TF-IDF vectorization and cosine similarity to match requests with tutor profiles. Added a mutual confirmation step and study session scheduling with calendar integration.",
+      "what_worked": "NLP matching was significantly better — matched pairs reported 78% satisfaction vs PeerLearn's category-based 52%. The mutual confirmation step reduced no-shows from 35% to 12%. Free-text descriptions captured nuances like 'need help with linked list deletion specifically' that categories never could.",
+      "failures": [
+        {
+          "title": "NLP matching was slow and required a server",
+          "description": "TF-IDF computation couldn't run client-side for the full user base. We needed a Python backend which complicated deployment and meant the app couldn't work as a simple static site. Hosting costs became a concern."
+        },
+        {
+          "title": "Study session quality was inconsistent",
+          "description": "Some tutors were great teachers, others knew the subject but couldn't explain concepts. We had no way to assess teaching ability before matching. Feedback came too late to prevent bad experiences."
+        }
+      ],
+      "insights": [
+        { "text": "Free-text NLP matching outperforms category-based matching for learning — students describe needs more precisely in their own words", "confidence": "high" },
+        { "text": "Mutual confirmation before sessions is a simple but powerful commitment device that halves no-show rates", "confidence": "high" },
+        { "text": "Teaching ability and subject knowledge are separate skills — matching should account for both", "confidence": "medium" },
+        { "text": "Client-side NLP is possible for small datasets using lightweight libraries like compromise.js — explore this for serverless deployment", "confidence": "low" }
+      ],
+      "open_questions": [
+        { "id": "q_016", "text": "Can client-side NLP (using libraries like TensorFlow.js or compromise.js) handle skill matching for a campus of 2000+ students without a backend?", "status": "open" },
+        { "id": "q_017", "text": "How do you assess teaching ability during the matching process — short intro videos, micro-teaching samples, or peer ratings?", "status": "open" }
+      ],
+      "tags": ["education", "nlp", "matching", "ai"],
+      "forked_from": "proj_003",
+      "forks": [],
+      "impact_score": 83,
+      "legacy_score": 710
+    },
+    {
+      "id": "proj_009",
+      "title": "HarvestHub",
+      "team": ["Divya Shankar", "Amit Trivedi"],
+      "year": 2023,
+      "category": "Sustainability",
+      "outcome": "Prototype",
+      "quality_tier": "Silver",
+      "rank_score": 59,
+      "problem": "The campus mess wasted approximately 120 kg of food daily. Leftover food from events, hostel mess, and canteens was thrown away while nearby communities faced food insecurity. No system existed to connect surplus food with people who needed it.",
+      "approach": "Built a food surplus reporting system where mess managers and event organizers could log excess food with quantity, type, and pickup window. Connected with three local NGOs who could dispatch volunteers for collection. Added analytics dashboard to track waste patterns.",
+      "what_worked": "The waste analytics dashboard revealed that Wednesday and Friday had 40% more waste than other days (due to specific menu items students disliked). This insight alone led to menu changes that reduced waste by 15%. One NGO partnership resulted in 200 kg of food redirected in the pilot month.",
+      "failures": [
+        {
+          "title": "NGO volunteer availability was unpredictable",
+          "description": "Food surplus is time-sensitive — it needs to be collected within 2-3 hours. NGO volunteers couldn't guarantee response times, and 30% of reported surplus expired before collection. We needed a more reliable last-mile solution."
+        },
+        {
+          "title": "Mess staff saw reporting as blame documentation",
+          "description": "Mess managers feared that logging food waste would be used to criticize their cooking or planning. They underreported waste to avoid looking bad. We couldn't overcome this perception despite emphasizing the donation angle."
+        }
+      ],
+      "insights": [
+        { "text": "Waste analytics are more immediately valuable than waste redistribution — start with data, then add logistics", "confidence": "high" },
+        { "text": "Framing food surplus as 'sharing opportunity' instead of 'waste reporting' changes staff willingness to participate", "confidence": "medium" },
+        { "text": "Time-sensitive logistics (food collection within 2-3 hours) need guaranteed response — volunteer-based models are unreliable for this", "confidence": "high" }
+      ],
+      "open_questions": [
+        { "id": "q_018", "text": "Can student volunteer networks with incentives (community service hours) provide more reliable food collection than external NGOs?", "status": "open" },
+        { "id": "q_019", "text": "What waste prediction model could anticipate daily surplus based on menu, weather, and academic calendar to enable proactive collection scheduling?", "status": "open" }
+      ],
+      "tags": ["sustainability", "food-waste", "social-impact", "analytics"],
+      "forked_from": "proj_006",
+      "forks": [],
+      "impact_score": 64,
+      "legacy_score": 420
+    },
+    {
+      "id": "proj_010",
+      "title": "CalmCampus",
+      "team": ["Kavya Nair", "Riya Chowdhury", "Aman Saxena"],
+      "year": 2023,
+      "category": "Mental Health",
+      "outcome": "Deployed",
+      "quality_tier": "Platinum",
+      "rank_score": 91,
+      "problem": "Building on MindSpace's learnings, CalmCampus reimagined campus mental health support as a community experience rather than an individual journaling tool. The goal was to solve the retention and moderation problems that killed MindSpace.",
+      "approach": "Created themed support circles (exam stress, homesickness, career anxiety) with trained student facilitators instead of anonymous free-for-all threads. Added streak mechanics for daily check-ins, peer recognition system, and integration with the campus counseling center for escalation of serious cases.",
+      "what_worked": "Themed circles with facilitators solved both the moderation and retention problems simultaneously. 30-day retention hit 58% (vs MindSpace's 28%). The escalation pathway to professional counseling was used 12 times in 3 months, likely preventing crises. Student facilitator training program became a credited course.",
+      "failures": [
+        {
+          "title": "Facilitator burnout was severe and unsupported",
+          "description": "Student facilitators (volunteers) were emotionally absorbing heavy peer disclosures without adequate support. Two facilitators reported increased anxiety themselves. We had not planned for facilitator mental health support."
+        },
+        {
+          "title": "Streak mechanics created unhealthy check-in pressure",
+          "description": "Some students reported feeling guilty about breaking streaks, turning a wellness tool into another source of anxiety. The gamification that was supposed to build habits was creating compulsive behavior in some users."
+        }
+      ],
+      "insights": [
+        { "text": "Facilitated small groups outperform both individual tools and anonymous forums for peer mental health support", "confidence": "high" },
+        { "text": "Anyone providing mental health peer support needs their own support system — facilitator wellness is a prerequisite", "confidence": "high" },
+        { "text": "Streak mechanics in wellness apps can become counterproductive — use flexible 'momentum' tracking instead of rigid streaks", "confidence": "high" },
+        { "text": "Institutional integration (counseling center partnership, course credit) gives mental health projects legitimacy and longevity", "confidence": "high" }
+      ],
+      "open_questions": [
+        { "id": "q_020", "text": "What's the ideal facilitator-to-participant ratio for online mental health support circles to remain effective?", "status": "open" },
+        { "id": "q_021", "text": "Can AI-assisted facilitator tools (sentiment analysis, risk flagging) reduce facilitator emotional burden without making interactions feel surveilled?", "status": "open" }
+      ],
+      "tags": ["mental-health", "community", "wellness", "peer-support"],
+      "forked_from": "proj_002",
+      "forks": [],
+      "impact_score": 97,
+      "legacy_score": 980
+    },
+    {
+      "id": "proj_011",
+      "title": "RideShare",
+      "team": ["Amit Trivedi", "Ishita Banerjee"],
+      "year": 2024,
+      "category": "Sustainability",
+      "outcome": "Prototype",
+      "quality_tier": "Silver",
+      "rank_score": 55,
+      "problem": "Revisiting the campus commute problem that GreenCommute couldn't solve, RideShare focused specifically on the safety and trust issues that prevented adoption, especially among women students.",
+      "approach": "Built on GreenCommute's concept but added college ID verification, women-only ride groups, real-time ride tracking shared with emergency contacts, and a rating system focused on safety (not convenience). Used WiFi-based location instead of GPS to reduce battery drain.",
+      "what_worked": "Women-only ride groups had 3x higher adoption than mixed groups. WiFi-based location reduced battery usage by 70% compared to GPS while maintaining acceptable accuracy on campus. College ID verification through selfie matching built trust quickly.",
+      "failures": [
+        {
+          "title": "WiFi location failed outside campus boundaries",
+          "description": "Our WiFi triangulation only worked within campus WiFi range. Students commuting from off-campus (the majority) couldn't be tracked, making the safety promise incomplete for the most important part of the journey."
+        },
+        {
+          "title": "Insurance and liability concerns stalled official adoption",
+          "description": "When we approached the college for official endorsement, they raised liability concerns — if an accident happened during a matched ride, who was responsible? This legal gray area prevented institutional support."
+        }
+      ],
+      "insights": [
+        { "text": "Women-only options aren't a feature — they're a prerequisite for any shared mobility platform targeting college campuses in India", "confidence": "high" },
+        { "text": "WiFi location works well within campus but fails for inter-campus commutes — hybrid approach needed", "confidence": "high" },
+        { "text": "Institutional adoption of student mobility projects gets blocked by liability concerns — need insurance partnerships or legal framework", "confidence": "medium" }
+      ],
+      "open_questions": [
+        { "id": "q_022", "text": "How do you create a hybrid location system that uses WiFi on campus and transitions to low-power GPS off campus seamlessly?", "status": "open" },
+        { "id": "q_023", "text": "What liability framework or insurance model works for college-endorsed peer ride-sharing programs?", "status": "open" }
+      ],
+      "tags": ["sustainability", "commute", "safety", "women-safety"],
+      "forked_from": "proj_004",
+      "forks": [],
+      "impact_score": 48,
+      "legacy_score": 290
+    },
+    {
+      "id": "proj_012",
+      "title": "SkillForward",
+      "team": ["Farhan Ahmed", "Nisha Patel", "Rohan Iyer"],
+      "year": 2024,
+      "category": "Career",
+      "outcome": "Prototype",
+      "quality_tier": "Gold",
+      "rank_score": 75,
+      "problem": "Final-year students consistently reported feeling unprepared for job interviews despite good academics. The gap between curriculum skills and industry expectations was invisible until rejection emails arrived. No tool existed to make this gap visible early enough to fix.",
+      "approach": "Built a skills gap analyzer that scraped job postings from LinkedIn and Naukri for roles students targeted, extracted required skills, compared against student profiles (built from course transcripts and self-reported skills), and generated personalized learning roadmaps with free resource links.",
+      "what_worked": "Gap analysis revealed that 73% of CS students lacked DevOps skills that appeared in 60% of target job postings. The personalized roadmaps with specific course links (Coursera, YouTube, documentation) were highly valued. 45 students used the tool and 28 reported starting at least one recommended learning path.",
+      "failures": [
+        {
+          "title": "Web scraping was fragile and broke frequently",
+          "description": "LinkedIn and Naukri changed their page structures every few weeks, breaking our scraping scripts. We spent more time maintaining scrapers than improving the product. The data pipeline was unsustainable without official API access."
+        },
+        {
+          "title": "Self-reported skills were inaccurate and inflated",
+          "description": "Students rated themselves as 'proficient' in skills they had minimal exposure to. The gap analysis was only as good as the input, and inflated self-assessments produced misleadingly small gaps that gave false confidence."
+        }
+      ],
+      "insights": [
+        { "text": "Skills gap visibility alone is highly motivating — students acted on learning roadmaps even without mandates", "confidence": "high" },
+        { "text": "Web scraping is not a sustainable data strategy — invest in API partnerships or use publicly available datasets", "confidence": "high" },
+        { "text": "Self-reported skill assessments need verification — use micro-quizzes or project evidence instead of self-rating", "confidence": "high" },
+        { "text": "Free learning resource curation (specific video, specific chapter) is more valuable than general course recommendations", "confidence": "medium" }
+      ],
+      "open_questions": [
+        { "id": "q_024", "text": "Can GitHub activity, LeetCode profiles, or course project submissions serve as objective skill verification instead of self-reporting?", "status": "open" },
+        { "id": "q_025", "text": "Is there a sustainable alternative to web scraping for collecting real-time job market skill requirements at scale?", "status": "open" }
+      ],
+      "tags": ["career", "skills", "education", "job-market"],
+      "forked_from": null,
+      "forks": [],
+      "impact_score": 71,
+      "legacy_score": 580
+    }
+  ],
+  "questions": [
+    { "id": "q_001", "text": "How do you incentivize non-technical canteen staff to adopt digital menu management without making it feel like extra work?", "source_project_id": "proj_001", "source_project_title": "CampusEats", "category": "Food & Delivery", "year_posted": 2020, "status": "open", "times_attempted": 3 },
+    { "id": "q_002", "text": "Is there a payment integration approach that satisfies institutional security policies while still enabling pre-payment?", "source_project_id": "proj_001", "source_project_title": "CampusEats", "category": "Food & Delivery", "year_posted": 2020, "status": "adopted", "times_attempted": 2 },
+    { "id": "q_003", "text": "Could a photo-based menu update system (just snap a picture of today's menu board) replace manual data entry entirely?", "source_project_id": "proj_001", "source_project_title": "CampusEats", "category": "Food & Delivery", "year_posted": 2020, "status": "open", "times_attempted": 1 },
+    { "id": "q_004", "text": "How can you moderate anonymous mental health content without breaking the anonymity that makes it safe?", "source_project_id": "proj_002", "source_project_title": "MindSpace", "category": "Mental Health", "year_posted": 2020, "status": "open", "times_attempted": 4 },
+    { "id": "q_005", "text": "What habit formation mechanics work for journaling apps — streaks, social accountability, or gamification?", "source_project_id": "proj_002", "source_project_title": "MindSpace", "category": "Mental Health", "year_posted": 2020, "status": "adopted", "times_attempted": 2 },
+    { "id": "q_006", "text": "What commitment mechanism works best for free peer tutoring — deposits, social contracts, or reputation systems?", "source_project_id": "proj_003", "source_project_title": "PeerLearn", "category": "Education", "year_posted": 2021, "status": "open", "times_attempted": 5 },
+    { "id": "q_007", "text": "Can NLP-based skill matching outperform manual category selection for connecting students with complementary knowledge?", "source_project_id": "proj_003", "source_project_title": "PeerLearn", "category": "Education", "year_posted": 2021, "status": "adopted", "times_attempted": 1 },
+    { "id": "q_008", "text": "How do you build trust and safety into a peer ride-sharing platform for college students, especially for women?", "source_project_id": "proj_004", "source_project_title": "GreenCommute", "category": "Sustainability", "year_posted": 2021, "status": "open", "times_attempted": 2 },
+    { "id": "q_009", "text": "Can flexible departure windows (± 15 min) solve the schedule matching problem for irregular student timetables?", "source_project_id": "proj_004", "source_project_title": "GreenCommute", "category": "Sustainability", "year_posted": 2021, "status": "open", "times_attempted": 0 },
+    { "id": "q_010", "text": "What's the minimum user base needed for a buddy-matching safety system to work reliably on a campus of 5000 students?", "source_project_id": "proj_005", "source_project_title": "SafeWalk", "category": "Campus Safety", "year_posted": 2022, "status": "open", "times_attempted": 1 },
+    { "id": "q_011", "text": "Can BLE beacons or WiFi triangulation replace GPS for indoor/campus location with acceptable accuracy and lower battery usage?", "source_project_id": "proj_005", "source_project_title": "SafeWalk", "category": "Campus Safety", "year_posted": 2022, "status": "open", "times_attempted": 3 },
+    { "id": "q_012", "text": "What's the simplest escrow or payment protection system that works for low-value campus transactions (₹100-2000 range)?", "source_project_id": "proj_006", "source_project_title": "SwapIt", "category": "Marketplace", "year_posted": 2022, "status": "open", "times_attempted": 2 },
+    { "id": "q_013", "text": "Can ISBN scanning automate textbook listing and prevent edition mismatch problems entirely?", "source_project_id": "proj_006", "source_project_title": "SwapIt", "category": "Marketplace", "year_posted": 2022, "status": "open", "times_attempted": 0 },
+    { "id": "q_014", "text": "Can a custom-trained OCR model handle handwritten Devanagari and English mixed-script menu boards with >80% accuracy?", "source_project_id": "proj_007", "source_project_title": "CampusEats v2", "category": "Food & Delivery", "year_posted": 2022, "status": "open", "times_attempted": 1 },
+    { "id": "q_015", "text": "Is there a way to create a lightweight campus payment token system that doesn't require institutional payment infrastructure?", "source_project_id": "proj_007", "source_project_title": "CampusEats v2", "category": "Food & Delivery", "year_posted": 2022, "status": "open", "times_attempted": 0 },
+    { "id": "q_016", "text": "Can client-side NLP (using libraries like TensorFlow.js or compromise.js) handle skill matching for a campus of 2000+ students without a backend?", "source_project_id": "proj_008", "source_project_title": "StudyBridge", "category": "Education", "year_posted": 2023, "status": "open", "times_attempted": 2 },
+    { "id": "q_017", "text": "How do you assess teaching ability during the matching process — short intro videos, micro-teaching samples, or peer ratings?", "source_project_id": "proj_008", "source_project_title": "StudyBridge", "category": "Education", "year_posted": 2023, "status": "open", "times_attempted": 1 },
+    { "id": "q_018", "text": "Can student volunteer networks with incentives (community service hours) provide more reliable food collection than external NGOs?", "source_project_id": "proj_009", "source_project_title": "HarvestHub", "category": "Sustainability", "year_posted": 2023, "status": "open", "times_attempted": 0 },
+    { "id": "q_019", "text": "What waste prediction model could anticipate daily surplus based on menu, weather, and academic calendar to enable proactive collection scheduling?", "source_project_id": "proj_009", "source_project_title": "HarvestHub", "category": "Sustainability", "year_posted": 2023, "status": "open", "times_attempted": 1 },
+    { "id": "q_020", "text": "What's the ideal facilitator-to-participant ratio for online mental health support circles to remain effective?", "source_project_id": "proj_010", "source_project_title": "CalmCampus", "category": "Mental Health", "year_posted": 2023, "status": "open", "times_attempted": 0 },
+    { "id": "q_021", "text": "Can AI-assisted facilitator tools (sentiment analysis, risk flagging) reduce facilitator emotional burden without making interactions feel surveilled?", "source_project_id": "proj_010", "source_project_title": "CalmCampus", "category": "Mental Health", "year_posted": 2023, "status": "open", "times_attempted": 2 },
+    { "id": "q_022", "text": "How do you create a hybrid location system that uses WiFi on campus and transitions to low-power GPS off campus seamlessly?", "source_project_id": "proj_011", "source_project_title": "RideShare", "category": "Sustainability", "year_posted": 2024, "status": "open", "times_attempted": 0 },
+    { "id": "q_023", "text": "What liability framework or insurance model works for college-endorsed peer ride-sharing programs?", "source_project_id": "proj_011", "source_project_title": "RideShare", "category": "Sustainability", "year_posted": 2024, "status": "open", "times_attempted": 1 },
+    { "id": "q_024", "text": "Can GitHub activity, LeetCode profiles, or course project submissions serve as objective skill verification instead of self-reporting?", "source_project_id": "proj_012", "source_project_title": "SkillForward", "category": "Career", "year_posted": 2024, "status": "open", "times_attempted": 3 },
+    { "id": "q_025", "text": "Is there a sustainable alternative to web scraping for collecting real-time job market skill requirements at scale?", "source_project_id": "proj_012", "source_project_title": "SkillForward", "category": "Career", "year_posted": 2024, "status": "open", "times_attempted": 1 }
+  ],
+  "students": [
+    {
+      "id": "stu_001",
+      "name": "Arjun Mehta",
+      "department": "Computer Science",
+      "graduation_year": 2023,
+      "projects": ["proj_001", "proj_007"],
+      "impact_score": 72,
+      "legacy_score": 620,
+      "level": 4,
+      "level_title": "Pathfinder",
+      "badges": [
+        { "id": "badge_fork_pioneer", "name": "Fork Pioneer", "description": "First student to fork and improve an earlier project" },
+        { "id": "badge_persistent", "name": "Persistent Builder", "description": "Worked on the same problem space across multiple projects" },
+        { "id": "badge_mentor", "name": "Mentor", "description": "Guided newer students on building on past work" }
+      ]
+    },
+    {
+      "id": "stu_002",
+      "name": "Kavya Nair",
+      "department": "Psychology",
+      "graduation_year": 2024,
+      "projects": ["proj_002", "proj_010"],
+      "impact_score": 97,
+      "legacy_score": 980,
+      "level": 6,
+      "level_title": "Architect",
+      "badges": [
+        { "id": "badge_deployed", "name": "Ship It", "description": "Successfully deployed a project used by real students" },
+        { "id": "badge_legacy_builder", "name": "Legacy Builder", "description": "Created a project that was forked and improved by others" },
+        { "id": "badge_impact_100", "name": "Century Impact", "description": "Achieved an impact score above 90" },
+        { "id": "badge_cross_dept", "name": "Bridge Builder", "description": "Collaborated across departments on a project" }
+      ]
+    },
+    {
+      "id": "stu_003",
+      "name": "Sneha Reddy",
+      "department": "Computer Science",
+      "graduation_year": 2024,
+      "projects": ["proj_003", "proj_008"],
+      "impact_score": 91,
+      "legacy_score": 840,
+      "level": 5,
+      "level_title": "Catalyst",
+      "badges": [
+        { "id": "badge_legacy_builder", "name": "Legacy Builder", "description": "Created a project that was forked and improved by others" },
+        { "id": "badge_gold_tier", "name": "Gold Standard", "description": "Achieved Gold quality tier on a project" },
+        { "id": "badge_persistent", "name": "Persistent Builder", "description": "Worked on the same problem space across multiple projects" }
+      ]
+    },
+    {
+      "id": "stu_004",
+      "name": "Nisha Patel",
+      "department": "Business Administration",
+      "graduation_year": 2025,
+      "projects": ["proj_006", "proj_012"],
+      "impact_score": 95,
+      "legacy_score": 920,
+      "level": 5,
+      "level_title": "Catalyst",
+      "badges": [
+        { "id": "badge_deployed", "name": "Ship It", "description": "Successfully deployed a project used by real students" },
+        { "id": "badge_platinum_tier", "name": "Platinum Achievement", "description": "Achieved Platinum quality tier on a project" },
+        { "id": "badge_cross_dept", "name": "Bridge Builder", "description": "Collaborated across departments on a project" }
+      ]
+    },
+    {
+      "id": "stu_005",
+      "name": "Farhan Ahmed",
+      "department": "Information Technology",
+      "graduation_year": 2025,
+      "projects": ["proj_008", "proj_012"],
+      "impact_score": 83,
+      "legacy_score": 710,
+      "level": 4,
+      "level_title": "Pathfinder",
+      "badges": [
+        { "id": "badge_forker", "name": "Standing on Shoulders", "description": "Built on a previous team's work through forking" },
+        { "id": "badge_gold_tier", "name": "Gold Standard", "description": "Achieved Gold quality tier on a project" }
+      ]
+    },
+    {
+      "id": "stu_006",
+      "name": "Priya Sharma",
+      "department": "Computer Science",
+      "graduation_year": 2022,
+      "projects": ["proj_001"],
+      "impact_score": 38,
+      "legacy_score": 320,
+      "level": 2,
+      "level_title": "Builder",
+      "badges": [
+        { "id": "badge_first_project", "name": "First Step", "description": "Submitted first project to the platform" },
+        { "id": "badge_legacy_builder", "name": "Legacy Builder", "description": "Created a project that was forked and improved by others" }
+      ]
+    },
+    {
+      "id": "stu_007",
+      "name": "Rohan Iyer",
+      "department": "Computer Science",
+      "graduation_year": 2024,
+      "projects": ["proj_002", "proj_012"],
+      "impact_score": 74,
+      "legacy_score": 610,
+      "level": 4,
+      "level_title": "Pathfinder",
+      "badges": [
+        { "id": "badge_cross_dept", "name": "Bridge Builder", "description": "Collaborated across departments on a project" },
+        { "id": "badge_multi_domain", "name": "Renaissance Mind", "description": "Contributed to projects in 3+ different categories" }
+      ]
+    },
+    {
+      "id": "stu_008",
+      "name": "Vikram Singh",
+      "department": "Mechanical Engineering",
+      "graduation_year": 2023,
+      "projects": ["proj_004"],
+      "impact_score": 31,
+      "legacy_score": 180,
+      "level": 1,
+      "level_title": "Seed",
+      "badges": [
+        { "id": "badge_first_project", "name": "First Step", "description": "Submitted first project to the platform" }
+      ]
+    },
+    {
+      "id": "stu_009",
+      "name": "Ishita Banerjee",
+      "department": "Computer Science",
+      "graduation_year": 2024,
+      "projects": ["proj_005", "proj_011"],
+      "impact_score": 56,
+      "legacy_score": 490,
+      "level": 3,
+      "level_title": "Connector",
+      "badges": [
+        { "id": "badge_safety_champion", "name": "Safety Champion", "description": "Built a project focused on campus safety" },
+        { "id": "badge_persistent", "name": "Persistent Builder", "description": "Worked on the same problem space across multiple projects" }
+      ]
+    },
+    {
+      "id": "stu_010",
+      "name": "Karthik Raman",
+      "department": "Electronics",
+      "graduation_year": 2024,
+      "projects": ["proj_006"],
+      "impact_score": 95,
+      "legacy_score": 920,
+      "level": 5,
+      "level_title": "Catalyst",
+      "badges": [
+        { "id": "badge_deployed", "name": "Ship It", "description": "Successfully deployed a project used by real students" },
+        { "id": "badge_platinum_tier", "name": "Platinum Achievement", "description": "Achieved Platinum quality tier on a project" },
+        { "id": "badge_impact_100", "name": "Century Impact", "description": "Achieved an impact score above 90" }
+      ]
+    },
+    {
+      "id": "stu_011",
+      "name": "Divya Shankar",
+      "department": "Environmental Science",
+      "graduation_year": 2025,
+      "projects": ["proj_009"],
+      "impact_score": 64,
+      "legacy_score": 420,
+      "level": 3,
+      "level_title": "Connector",
+      "badges": [
+        { "id": "badge_green_champion", "name": "Green Champion", "description": "Built a project focused on sustainability" },
+        { "id": "badge_social_impact", "name": "Social Impact", "description": "Project directly benefited communities outside campus" }
+      ]
+    },
+    {
+      "id": "stu_012",
+      "name": "Amit Trivedi",
+      "department": "Civil Engineering",
+      "graduation_year": 2025,
+      "projects": ["proj_009", "proj_011"],
+      "impact_score": 64,
+      "legacy_score": 420,
+      "level": 3,
+      "level_title": "Connector",
+      "badges": [
+        { "id": "badge_cross_dept", "name": "Bridge Builder", "description": "Collaborated across departments on a project" },
+        { "id": "badge_green_champion", "name": "Green Champion", "description": "Built a project focused on sustainability" }
+      ]
+    },
+    {
+      "id": "stu_013",
+      "name": "Tanvi Gupta",
+      "department": "Computer Science",
+      "graduation_year": 2024,
+      "projects": ["proj_007"],
+      "impact_score": 52,
+      "legacy_score": 340,
+      "level": 2,
+      "level_title": "Builder",
+      "badges": [
+        { "id": "badge_forker", "name": "Standing on Shoulders", "description": "Built on a previous team's work through forking" }
+      ]
+    },
+    {
+      "id": "stu_014",
+      "name": "Siddharth Nair",
+      "department": "Computer Science",
+      "graduation_year": 2024,
+      "projects": ["proj_007"],
+      "impact_score": 52,
+      "legacy_score": 340,
+      "level": 2,
+      "level_title": "Builder",
+      "badges": [
+        { "id": "badge_forker", "name": "Standing on Shoulders", "description": "Built on a previous team's work through forking" }
+      ]
+    },
+    {
+      "id": "stu_015",
+      "name": "Rahul Verma",
+      "department": "Information Technology",
+      "graduation_year": 2024,
+      "projects": ["proj_005"],
+      "impact_score": 56,
+      "legacy_score": 390,
+      "level": 3,
+      "level_title": "Connector",
+      "badges": [
+        { "id": "badge_safety_champion", "name": "Safety Champion", "description": "Built a project focused on campus safety" }
+      ]
+    },
+    {
+      "id": "stu_016",
+      "name": "Deepa Krishnan",
+      "department": "Computer Science",
+      "graduation_year": 2024,
+      "projects": ["proj_005"],
+      "impact_score": 56,
+      "legacy_score": 390,
+      "level": 3,
+      "level_title": "Connector",
+      "badges": [
+        { "id": "badge_safety_champion", "name": "Safety Champion", "description": "Built a project focused on campus safety" }
+      ]
+    },
+    {
+      "id": "stu_017",
+      "name": "Ananya Das",
+      "department": "Mechanical Engineering",
+      "graduation_year": 2023,
+      "projects": ["proj_004"],
+      "impact_score": 31,
+      "legacy_score": 180,
+      "level": 1,
+      "level_title": "Seed",
+      "badges": [
+        { "id": "badge_first_project", "name": "First Step", "description": "Submitted first project to the platform" },
+        { "id": "badge_green_champion", "name": "Green Champion", "description": "Built a project focused on sustainability" }
+      ]
+    },
+    {
+      "id": "stu_018",
+      "name": "Meera Joshi",
+      "department": "Computer Science",
+      "graduation_year": 2023,
+      "projects": ["proj_003"],
+      "impact_score": 91,
+      "legacy_score": 840,
+      "level": 5,
+      "level_title": "Catalyst",
+      "badges": [
+        { "id": "badge_gold_tier", "name": "Gold Standard", "description": "Achieved Gold quality tier on a project" },
+        { "id": "badge_legacy_builder", "name": "Legacy Builder", "description": "Created a project that was forked and improved by others" }
+      ]
+    },
+    {
+      "id": "stu_019",
+      "name": "Riya Chowdhury",
+      "department": "Psychology",
+      "graduation_year": 2025,
+      "projects": ["proj_010"],
+      "impact_score": 97,
+      "legacy_score": 980,
+      "level": 6,
+      "level_title": "Architect",
+      "badges": [
+        { "id": "badge_deployed", "name": "Ship It", "description": "Successfully deployed a project used by real students" },
+        { "id": "badge_impact_100", "name": "Century Impact", "description": "Achieved an impact score above 90" }
+      ]
+    },
+    {
+      "id": "stu_020",
+      "name": "Aman Saxena",
+      "department": "Computer Science",
+      "graduation_year": 2025,
+      "projects": ["proj_010"],
+      "impact_score": 97,
+      "legacy_score": 980,
+      "level": 6,
+      "level_title": "Architect",
+      "badges": [
+        { "id": "badge_deployed", "name": "Ship It", "description": "Successfully deployed a project used by real students" },
+        { "id": "badge_cross_dept", "name": "Bridge Builder", "description": "Collaborated across departments on a project" }
+      ]
+    },
+    {
+      "id": "stu_021",
+      "name": "Pooja Hegde",
+      "department": "Information Technology",
+      "graduation_year": 2025,
+      "projects": ["proj_008"],
+      "impact_score": 83,
+      "legacy_score": 710,
+      "level": 4,
+      "level_title": "Pathfinder",
+      "badges": [
+        { "id": "badge_forker", "name": "Standing on Shoulders", "description": "Built on a previous team's work through forking" },
+        { "id": "badge_gold_tier", "name": "Gold Standard", "description": "Achieved Gold quality tier on a project" }
+      ]
+    },
+    {
+      "id": "stu_022",
+      "name": "Aditya Kulkarni",
+      "department": "Information Technology",
+      "graduation_year": 2023,
+      "projects": ["proj_003"],
+      "impact_score": 91,
+      "legacy_score": 840,
+      "level": 5,
+      "level_title": "Catalyst",
+      "badges": [
+        { "id": "badge_gold_tier", "name": "Gold Standard", "description": "Achieved Gold quality tier on a project" },
+        { "id": "badge_legacy_builder", "name": "Legacy Builder", "description": "Created a project that was forked and improved by others" },
+        { "id": "badge_question_raiser", "name": "Question Raiser", "description": "Left behind open questions that inspired future projects" }
+      ]
+    }
+  ]
+}

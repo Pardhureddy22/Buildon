@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Graph — BuildOn</title>
+  <meta name="description" content="Explore relationships between projects, problems, approaches, insights, and open questions.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .graph-container {
+      width: 100%;
+      height: 75vh;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #0f0f13;
+      overflow: hidden;
+      position: relative;
+    }
+    #cy {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .graph-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      background: var(--bg-surface);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      align-items: center;
+    }
+    .graph-legend {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      margin-left: auto;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .graph-panel {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 320px;
+      background: rgba(18, 18, 24, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateX(110%);
+      transition: transform 0.3s ease;
+      z-index: 10;
+    }
+    .graph-panel.active {
+      transform: translateX(0);
+    }
+    .panel-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .panel-type {
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--brand-blue);
+      margin-bottom: 8px;
+    }
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .panel-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .panel-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .graph-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="app-sidebar" id="appSidebar"></aside>
+    <main class="app-main">
+      <div class="app-topbar">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.app-layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">☰</button>
+        <div class="app-topbar-right">
+          <div class="app-user-pill" id="userPill"></div>
+        </div>
+      </div>
+      <div class="app-content">
+        <div class="dash-welcome">
+          <div>
+            <h1>Knowledge Graph</h1>
+            <p class="subtitle">Explore how ideas, problems, and insights are connected across projects.</p>
+          </div>
+        </div>
+
+        <div class="graph-controls">
+          <select class="form-select" id="graphFilter" style="max-width: 250px;">
+            <option value="all">Show All Ecosystems</option>
+            <!-- Categories will be injected here -->
+          </select>
+          <button class="btn btn-secondary light" id="btnRelayout">Recalculate Layout</button>
+          
+          <div class="graph-legend">
+            <div class="legend-item"><div class="legend-color" style="background:#4dabf7"></div> Projects</div>
+            <div class="legend-item"><div class="legend-color" style="background:#ff6b6b"></div> Problems</div>
+            <div class="legend-item"><div class="legend-color" style="background:#51cf66"></div> Approaches</div>
+            <div class="legend-item"><div class="legend-color" style="background:#fcc419"></div> Insights</div>
+            <div class="legend-item"><div class="legend-color" style="background:#cc5de8"></div> Questions</div>
+          </div>
+        </div>
+
+        <div class="graph-container">
+          <div id="cy"></div>
+          
+          <div class="graph-loading" id="graphLoading">
+            <div class="spinner" style="width:40px;height:40px;margin:0 auto 16px"></div>
+            <div>Rendering Graph...</div>
+          </div>
+
+          <div class="graph-panel" id="graphPanel">
+            <button class="panel-close" onclick="closePanel()">&times;</button>
+            <div class="panel-type" id="panelType">NODE TYPE</div>
+            <div class="panel-title" id="panelTitle">Node Name</div>
+            <div class="panel-desc" id="panelDesc">Description goes here...</div>
+            <div class="panel-meta" id="panelMeta"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Cytoscape JS CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+  <!-- Cytoscape cola layout (physics-based) -->
+  <script src="https://unpkg.com/webcola@3.4.0/WebCola/cola.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cytoscape-cola@2.4.0/cytoscape-cola.min.js"></script>
+  
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/seedData.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/graphApi.js"></script>
+  <script src="js/idea-graph.js"></script>
+</body>
+</html>
