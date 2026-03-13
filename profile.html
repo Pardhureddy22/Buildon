@@ -56,18 +56,21 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       await renderDashboardSidebar('profile');
-      const params = new URLSearchParams(location.search);
-      const id = params.get('id');
+      let id = params.get('id');
+      if (!id) {
+        id = await getSessionUserId();
+      }
+
       const students = await getAllStudents();
       const projects = await getAllProjects();
       const student = id ? students.find(s => s.id === id) : students[0];
 
       if (!student) {
-        document.getElementById('profileContent').innerHTML = renderEmptyState('👤','Student Not Found','This profile doesn\'t exist.');
+        document.getElementById('profileContent').innerHTML = renderEmptyState('👤','Student Not Found',"This profile doesn't exist.");
         return;
       }
 
-      const stuProjects = student.projects.map(pid => projects.find(p => p.id === pid)).filter(Boolean);
+      const stuProjects = projects.filter(p => p.user_id === student.id);
       const earnedIds = (student.badges || []).map(b => b.id);
       const initials = getInitials(student.name);
 
@@ -199,6 +202,11 @@
   </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
